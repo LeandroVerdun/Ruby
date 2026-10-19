@@ -1,0 +1,62 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+
+# Variables de entorno y secretos
+.env
+.env.*
+!.env.example
+
+# Modelos de voz
+vosk-model*/
+*.onnx
+
+# Notas y archivos personales
+notas_ruby.txt
+
+# Archivos de configuración local
+browser_config.json
+
+# Editores
+.vscode/
+.idea/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+
+
+# Perfiles y datos de prueba del navegador
+opera_perfil_prueba/
+
+# Notas personales y archivos temporales
+notas del dia anterior.txt
+TEXTO.TXT
+
+# Copias de seguridad y pruebas temporales
+probar_navegador_backup.py
+
+
+
+# Configuración local del navegador
+commands/browser_config.json
+
+# Modelos y recursos que no son código Python
+commands/*.mdl
+commands/*.mat
+commands/*.dubm
+commands/*.stats
+commands/*.conf
+commands/*.int
+commands/README
+
+
+/# 🌹 Ruby IA — Comandos actuales.txt

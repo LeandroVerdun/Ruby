@@ -1,0 +1,8 @@
+
+keyboard
+playwright
+sounddevice
+vosk
+PyAutoGUI
+PyGetWindow
+yt-dlp

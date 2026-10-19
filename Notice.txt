@@ -1,0 +1,9 @@
+Ruby IA — Copyright Notice
+
+Copyright (c) 2026 Red Angel
+
+Ruby IA is a personal software project under active development.
+
+Unless expressly stated otherwise, all rights are reserved. No license is granted to copy, modify, distribute, sublicense, or use this project's original code for commercial purposes without prior written permission from the copyright holder.
+
+Third-party components remain subject to their respective licenses.

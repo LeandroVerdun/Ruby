@@ -1,0 +1,118 @@
+Hoja de ruta oficial de Ruby IA
+
+Fase 1. Consolidar el núcleo de Ruby
+Actual
+
+Objetivo: conseguir una base estable antes de agregar inteligencia más compleja.
+- Revisar la estructura modular de Python.
+- Comprobar que los comandos de música, sistema y navegador funcionen correctamente.
+- Corregir la detección de comandos de voz y sus errores de reconocimiento.
+- Mejorar el control de pestañas y la lectura de páginas con Playwright.
+- Mantener la consola y los comandos de voz funcionando juntos.
+- Dejar GitHub actualizado con versiones funcionales.
+
+
+
+
+Fase 2. Memoria de Ruby
+
+Objetivo: que recuerde información útil entre sesiones.
+- Crear una memoria persistente con SQLite o archivos estructurados.
+- Recordar preferencias, datos que le indiques y proyectos en curso.
+- Permitir comandos para guardar, consultar, corregir y olvidar información.
+- Separar la memoria permanente del historial de conversaciones.
+- Evitar guardar contraseñas o datos sensibles.
+
+
+
+
+Fase 3. Integración con un modelo de lenguaje (LLM)
+
+Objetivo: pasar de reconocer comandos a comprender y mantener conversaciones.
+- Integrar un modelo de lenguaje mediante una API o un modelo local.
+- Entender instrucciones formuladas de distintas maneras.
+- Responder preguntas y explicar conceptos.
+- Utilizar la memoria como contexto cuando corresponda.
+- Conservar los comandos existentes para tareas que requieren acciones concretas.
+- Manejar errores cuando el modelo o Internet no estén disponibles.
+
+
+
+
+Fase 4. Internet y herramientas
+
+Objetivo: que Ruby pueda investigar y utilizar la información encontrada.
+- Buscar información en Internet.
+- Leer páginas y resumirlas.
+- Abrir enlaces y navegar entre resultados.
+- Buscar información práctica, como restaurantes o estaciones de servicio.
+- Distinguir entre información encontrada y respuestas generadas por el modelo.
+
+
+
+
+Fase 5. Visión artificial
+
+Objetivo: que Ruby pueda interpretar información visual.
+- Analizar capturas de pantalla cuando se lo pidas.
+- Reconocer elementos de interfaces y ventanas.
+- Interpretar imágenes y documentos.
+- Más adelante, evaluar el uso de cámaras y otros dispositivos.
+
+
+
+
+Fase 6. Voz natural
+
+Objetivo: conversar con Ruby de forma más fluida.
+- Mantener la activación mediante «Ruby» o «Hey Ruby».
+- Mejorar la precisión del reconocimiento de voz.
+- Incorporar respuestas habladas con una voz de estilo anime.
+- Permitir interrupciones y controlar cuándo escucha.
+- Mantener la interacción por texto como alternativa.
+
+
+
+
+Fase 7. Automatización del PC
+
+Objetivo: ejecutar tareas solicitadas sin quitarte el control de la computadora.
+- Abrir programas y juegos.
+- Ayudarte con proyectos web y herramientas de desarrollo.
+- Controlar ventanas, pestañas y aplicaciones.
+- Permitir que Ruby busque guías para resolver acertijos mientras jugás.
+- Pedir confirmación antes de acciones importantes o destructivas.
+
+
+
+
+Fase 8. Personalidad y contexto
+
+Objetivo: darle una identidad coherente a Ruby.
+- Definir su manera de hablar y comportarse.
+- Diferenciar las respuestas serias de las conversaciones informales.
+- Adaptar el tono al contexto.
+- Aprovechar la memoria sin repetir información innecesariamente.
+
+
+
+
+Fase 9. Interfaz y avatar 3D
+
+Objetivo: darle una presencia visual a Ruby en tu computadora.
+- Crear una interfaz gráfica.
+- Diseñar su avatar 3D inspirado en Ruby Rose.
+- Incorporar expresiones, animaciones y sincronización labial.
+- Explorar distintos modelos y vestimentas según el contexto.
+
+
+
+
+Fase 10. Ecosistema completo
+
+Objetivo: conectar Ruby con el resto de tus dispositivos.
+- Usar el teléfono como control remoto de Ruby en la PC.
+- Enviar contenido a la TV.
+- Explorar gafas inteligentes, luces, cámaras y otros dispositivos.
+- Diseñar una arquitectura segura para acceder a Ruby desde fuera de casa.
+- Añadir hardware solamente cuando exista una necesidad concreta.

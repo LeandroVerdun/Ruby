@@ -60,3 +60,13 @@ commands/README
 
 
 /# 🌹 Ruby IA — Comandos actuales.txt
+
+
+# Entornos virtuales de Python
+ruby-voz-test/
+venv/
+.venv/
+
+# Caché de Python
+__pycache__/
+*.py[cod]

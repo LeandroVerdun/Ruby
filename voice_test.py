@@ -4,6 +4,36 @@ import queue
 from datetime import datetime
 from pathlib import Path
 
+import os
+import sys
+
+site_packages = Path(sys.prefix) / "Lib" / "site-packages"
+nvidia = site_packages / "nvidia"
+
+carpetas_dll = [
+    nvidia / "cublas" / "bin",
+    nvidia / "cudnn" / "bin",
+    nvidia / "cuda_nvrtc" / "bin",
+    nvidia / "cuda_runtime" / "bin",
+]
+
+dll_handles = []
+
+for carpeta in carpetas_dll:
+    if carpeta.exists():
+        dll_handles.append(os.add_dll_directory(str(carpeta)))
+
+rutas = [str(c) for c in carpetas_dll if c.exists()]
+os.environ["PATH"] = (
+    os.pathsep.join(rutas)
+    + os.pathsep
+    + os.environ.get("PATH", "")
+)
+
+
+import numpy as np
+from faster_whisper import WhisperModel
+
 import sounddevice as sd
 from vosk import Model, KaldiRecognizer
 
@@ -12,6 +42,11 @@ from ruby import responder
 import re
 import unicodedata
 from difflib import SequenceMatcher
+
+import os
+import sys
+import numpy as np
+from faster_whisper import WhisperModel
 
 
 CARPETA_PROYECTO = Path(__file__).resolve().parent
@@ -70,7 +105,7 @@ def detectar_activacion(frase):
     # Variantes del nombre que puede reconocer Vosk.
     alias_simples = {
         "ruby", "rubi", "rudy", "robin",
-        "rubia", "rubio",
+        "rubia", "rubio", "rui",
     }
 
     alias_dobles = {
@@ -121,8 +156,9 @@ def detectar_activacion(frase):
     return False, ""
 
 
+
 def procesar_frase(frase):
-    global MODO_NOTA, BORRADOR_NOTA, ESPERANDO_COMANDO
+    global MODO_NOTA, BORRADOR_NOTA
 
     frase = frase.strip().lower()
 
@@ -131,12 +167,12 @@ def procesar_frase(frase):
 
     print(f"Vos dijiste: {frase}")
 
-    # Salida de la prueba de voz.
+    # Permitir terminar el sistema de voz.
     if frase in ("salir", "terminar prueba"):
         print("Ruby: Terminando la prueba de voz.")
         return False
 
-    # Si estamos dictando una nota, procesamos el dictado.
+    # Si estamos dictando una nota, guardar el texto.
     if MODO_NOTA:
         if frase == "guardar":
             if BORRADOR_NOTA:
@@ -147,7 +183,7 @@ def procesar_frase(frase):
                 print("Ruby: La nota está vacía.")
             return True
 
-        if frase in ("cancelar nota", "cancelá nota"):
+        if frase in ("cancelar nota", "cancela nota", "cancelá nota"):
             BORRADOR_NOTA = []
             MODO_NOTA = False
             print("Ruby: Nota cancelada.")
@@ -157,40 +193,23 @@ def procesar_frase(frase):
         print("Ruby: Texto agregado a la nota.")
         return True
 
-    # Detectar el nombre de Ruby.
+    # Si decís el nombre de Ruby, lo quitamos de la orden,
+    # pero ya no es necesario utilizarlo para activar el sistema.
     activada, comando = detectar_activacion(frase)
 
-    if not ESPERANDO_COMANDO:
-        if not activada:
+    if activada:
+        if not comando.strip():
             return True
+        frase = comando.strip()
 
-        ESPERANDO_COMANDO = True
-        print("Ruby: Te escucho.")
-
-        # Permite decir la activación y el comando juntos.
-        if not comando:
-            return True
-
-    elif activada and comando:
-        # Permite volver a llamar a Ruby mientras está activa.
-        pass
-
-    elif activada and not comando:
-        print("Ruby: Te escucho.")
-        return True
-
-    # Desde aquí procesamos una orden reconocida.
-    if comando:
-        frase = comando
-
-    # Entrar al modo de notas.
+    # Mantener el comando para tomar notas.
     if frase in ("toma nota", "tomá nota", "anota", "anotá"):
         MODO_NOTA = True
         BORRADOR_NOTA = []
         print("Ruby: Empezá a dictar. Decí 'guardar' al terminar.")
         return True
 
-    # Volver al modo de espera.
+    # En escucha continua no hay modo de espera.
     frase_normalizada = normalizar_texto(frase)
 
     if any(
@@ -206,61 +225,75 @@ def procesar_frase(frase):
             "pausa el microfono",
         )
     ):
-        ESPERANDO_COMANDO = False
-        print("Ruby: Vuelvo al modo de espera.")
+        print(
+            "Ruby: Sigo en escucha continua. "
+            "Escribí 'salir' en la consola para cerrar el sistema."
+        )
         return True
 
-
-    # Comando sin contenido después de activar.
-    if not frase:
-        return True
-
-    # Ejecutar las funciones existentes de Ruby.
+    # Procesar directamente todo lo que Whisper reconoce.
     respuesta = responder(frase)
     print(f"Ruby IA: {respuesta}")
 
-    # Una orden procesada termina la sesión de comando.
-    ESPERANDO_COMANDO = False
-    print("Ruby: En espera. Decime 'Hey Ruby' para llamarme.")
-
     return True
+
+
 
 
 
 def iniciar_voz():
     global ESPERANDO_COMANDO
 
-    if not CARPETA_MODELO.is_dir():
-        print("Ruby: No encuentro el modelo de voz.")
-        print("Revisá la carpeta:", CARPETA_MODELO)
+    print("Ruby: Cargando Whisper en la GPU...")
+
+    try:
+        modelo = WhisperModel(
+            "large-v3-turbo",
+            device="cuda",
+            compute_type="float16"
+        )
+    except Exception as error:
+        print("Ruby: No pude iniciar Whisper:", error)
         return
 
-    print("Ruby: Cargando el modelo de voz...")
+    DURACION = 5
 
-    modelo = Model(str(CARPETA_MODELO))
-    reconocedor = KaldiRecognizer(modelo, FRECUENCIA)
-
-    print("Ruby: Sistema de voz iniciado.")
+    print("Ruby: Sistema de voz iniciado con Whisper.")
     print("Decí 'Ruby' o 'Hey Ruby' para llamarme.")
     print("Decí 'salir' para terminar el proceso de voz.\n")
 
     try:
-        with sd.RawInputStream(
-            samplerate=FRECUENCIA,
-            blocksize=8000,
-            dtype="int16",
-            channels=1,
-            callback=recibir_audio,
-        ):
-            while True:
-                datos = audio_cola.get()
+        while True:
+            audio = sd.rec(
+                int(DURACION * FRECUENCIA),
+                samplerate=FRECUENCIA,
+                channels=1,
+                dtype="float32"
+            )
 
-                if reconocedor.AcceptWaveform(datos):
-                    resultado = json.loads(reconocedor.Result())
-                    frase = resultado.get("text", "")
+            sd.wait()
+            audio = np.squeeze(audio)
 
-                    if frase and not procesar_frase(frase):
-                        break
+            segmentos, info = modelo.transcribe(
+                audio,
+                beam_size=5,
+                vad_filter=True,
+                initial_prompt=(
+                    "Ruby, Rubi, Rui, Discord, YouTube, "
+                    "Google, Resident Evil."
+                )
+            )
+
+            frase = " ".join(
+                segmento.text.strip()
+                for segmento in segmentos
+            ).strip()
+
+            if frase:
+                print(f"Idioma detectado: {info.language}")
+
+                if not procesar_frase(frase):
+                    break
 
     except KeyboardInterrupt:
         print("\nRuby: Sistema de voz detenido.")

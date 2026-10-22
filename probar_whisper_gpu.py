@@ -46,7 +46,7 @@ print("\nCargando Whisper en la GPU...")
 inicio_carga = time.time()
 
 modelo = WhisperModel(
-    "small",
+    "large-v3-turbo",
     device="cuda",
     compute_type="float16"
 )

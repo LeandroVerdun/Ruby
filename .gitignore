@@ -1,55 +1,45 @@
 
-# Python
+# ==============================
+# Python y caché
+# ==============================
 __pycache__/
 *.py[cod]
 *.pyo
+*.pyd
+*.log
+.pytest_cache/
+.mypy_cache/
 
+# ==============================
 # Entornos virtuales
+# ==============================
 venv/
 .venv/
 env/
+ruby-voz-test/
 
+# ==============================
 # Variables de entorno y secretos
+# ==============================
 .env
 .env.*
 !.env.example
 
-# Modelos de voz
+# ==============================
+# Modelos de voz y archivos pesados
+# ==============================
 vosk-model*/
 *.onnx
+models/
+whisper_models/
 
-# Notas y archivos personales
-notas_ruby.txt
+**/final.dubm
+**/final.mdl
+**/final.mat
+**/global_cmvn.stats
+**/model.conf
+**/splice.conf
 
-# Archivos de configuración local
-browser_config.json
-
-# Editores
-.vscode/
-.idea/
-
-# Sistema operativo
-.DS_Store
-Thumbs.db
-
-
-
-# Perfiles y datos de prueba del navegador
-opera_perfil_prueba/
-
-# Notas personales y archivos temporales
-notas del dia anterior.txt
-TEXTO.TXT
-
-# Copias de seguridad y pruebas temporales
-probar_navegador_backup.py
-
-
-
-# Configuración local del navegador
-commands/browser_config.json
-
-# Modelos y recursos que no son código Python
 commands/*.mdl
 commands/*.mat
 commands/*.dubm
@@ -58,15 +48,45 @@ commands/*.conf
 commands/*.int
 commands/README
 
+# ==============================
+# Configuración local del navegador
+# ==============================
+browser_config.json
+commands/browser_config.json
 
-/# 🌹 Ruby IA — Comandos actuales.txt
+# ==============================
+# Perfiles y datos locales del navegador
+# ==============================
+opera_perfil_prueba/
+opera_perfil_prueba*/
+opera_perfil*/
+chrome_perfil*/
 
+# ==============================
+# Copias de seguridad
+# ==============================
+*_backup.py
+*_backup.*
+*.bak
+*.old
 
-# Entornos virtuales de Python
-ruby-voz-test/
-venv/
-.venv/
+# ==============================
+# Notas personales y archivos temporales
+# ==============================
+notas_ruby.txt
+notas del dia anterior.txt
+TEXTO.TXT
+test_sonido.txt
+probar_audio_temporal.*
+salida_prueba.*
+temp/
+tmp/
 
-# Caché de Python
-__pycache__/
-*.py[cod]
+# ==============================
+# Editores y sistema operativo
+# ==============================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,4 +1,5 @@
 
+import time
 import json
 import queue
 from datetime import datetime
@@ -158,7 +159,7 @@ def detectar_activacion(frase):
 
 
 def procesar_frase(frase):
-    global MODO_NOTA, BORRADOR_NOTA
+    global MODO_NOTA, BORRADOR_NOTA, ESPERANDO_COMANDO
 
     frase = frase.strip().lower()
 
@@ -166,6 +167,23 @@ def procesar_frase(frase):
         return True
 
     print(f"Vos dijiste: {frase}")
+
+        # Respuesta automática cuando Ruby detecta un estornudo.
+    frase_normalizada = normalizar_texto(frase)
+
+    estornudos = (
+        "achoo",
+        "achoo achoo",
+        "atchoo",
+        "achis",
+        "achu",
+        "estornudo",
+        "estornude"
+    )
+
+    if frase_normalizada in estornudos:
+        print("Ruby: ¡Salud!")
+        return True
 
     # Permitir terminar el sistema de voz.
     if frase in ("salir", "terminar prueba"):
@@ -209,25 +227,32 @@ def procesar_frase(frase):
         print("Ruby: Empezá a dictar. Decí 'guardar' al terminar.")
         return True
 
-    # En escucha continua no hay modo de espera.
+    
+    # Desactivar la escucha por voz sin cerrar Ruby.
     frase_normalizada = normalizar_texto(frase)
+
+    comandos_desactivar = (
+        "deja de escuchar",
+        "dejad de escuchar",
+        "dejad escuchar",
+        "dejar de escuchar",
+        "para de escuchar",
+        "para la escucha",
+        "pausa la escucha",
+        "pausa el microfono",
+        "desactiva la escucha",
+        "desactivar la escucha",
+        "ruby descansa",
+    )
 
     if any(
         expresion in frase_normalizada
-        for expresion in (
-            "deja de escuchar",
-            "dejad de escuchar",
-            "dejad escuchar",
-            "dejar de escuchar",
-            "para de escuchar",
-            "para la escucha",
-            "pausa la escucha",
-            "pausa el microfono",
-        )
+        for expresion in comandos_desactivar
     ):
+        ESPERANDO_COMANDO = True
         print(
-            "Ruby: Sigo en escucha continua. "
-            "Escribí 'salir' en la consola para cerrar el sistema."
+            "Ruby: Dejé de escuchar comandos. "
+            "Decí 'Ruby' o 'Hey Ruby' para activarme de nuevo."
         )
         return True
 
@@ -236,6 +261,7 @@ def procesar_frase(frase):
     print(f"Ruby IA: {respuesta}")
 
     return True
+
 
 
 
@@ -256,44 +282,169 @@ def iniciar_voz():
         print("Ruby: No pude iniciar Whisper:", error)
         return
 
-    DURACION = 5
+    # Configuración de la escucha
+    BLOQUE_SEGUNDOS = 0.25
+    SILENCIO_FINAL = 3.0
+    TIEMPO_INACTIVIDAD = 180.0
+    UMBRAL_AUDIO = 0.008
+    VENTANA_ACTIVACION = 3.0
+    INTERVALO_ACTIVACION = 1.0
 
-    print("Ruby: Sistema de voz iniciado con Whisper.")
-    print("Decí 'Ruby' o 'Hey Ruby' para llamarme.")
-    print("Decí 'salir' para terminar el proceso de voz.\n")
+    frecuencia_bloque = int(FRECUENCIA * BLOQUE_SEGUNDOS)
+    bloques = queue.Queue()
+
+    # Estado inicial: Ruby espera su nombre.
+    ESPERANDO_COMANDO = True
+
+    audio_reciente = []
+    duracion_reciente = 0.0
+    tiempo_ultima_busqueda = 0.0
+
+    audio_comando = []
+    comando_iniciado = False
+    ultimo_audio = 0.0
+    ultima_actividad = time.monotonic()
+
+    def recibir_bloque(indata, frames, time_info, status):
+        if status:
+            print("Ruby: Aviso de audio:", status)
+
+        bloques.put(indata[:, 0].copy())
+
+    def transcribir(audio):
+        if not audio:
+            return "", None
+
+        datos = np.concatenate(audio).astype(np.float32)
+
+        if datos.size == 0:
+            return "", None
+
+        segmentos, info = modelo.transcribe(
+            datos,
+            beam_size=5,
+            vad_filter=True,
+            initial_prompt=(
+                "Ruby, Rubi, Discord, YouTube, Google, "
+                "Resident Evil, volumen, música."
+            )
+        )
+
+        texto = " ".join(
+            segmento.text.strip()
+            for segmento in segmentos
+        ).strip()
+
+        return texto, info.language
+
+    print("Ruby: Sistema de voz iniciado.")
+    print("Ruby: Estoy en espera. Decí 'Ruby' o 'Hey Ruby'.")
+    print("Ruby: Una vez activada, podés dar varios comandos.")
+    print("Ruby: Tras 3 minutos sin actividad dejaré de escuchar comandos.\n")
 
     try:
-        while True:
-            audio = sd.rec(
-                int(DURACION * FRECUENCIA),
-                samplerate=FRECUENCIA,
-                channels=1,
-                dtype="float32"
-            )
+        with sd.InputStream(
+            samplerate=FRECUENCIA,
+            channels=1,
+            dtype="float32",
+            blocksize=frecuencia_bloque,
+            callback=recibir_bloque
+        ):
+            while True:
+                try:
+                    bloque = bloques.get(timeout=0.5)
+                except queue.Empty:
+                    continue
 
-            sd.wait()
-            audio = np.squeeze(audio)
+                ahora = time.monotonic()
+                energia = float(np.sqrt(np.mean(bloque ** 2)))
 
-            segmentos, info = modelo.transcribe(
-                audio,
-                beam_size=5,
-                vad_filter=True,
-                initial_prompt=(
-                    "Ruby, Rubi, Rui, Discord, YouTube, "
-                    "Google, Resident Evil."
-                )
-            )
+                if ESPERANDO_COMANDO:
+                    audio_reciente.append(bloque)
+                    duracion_reciente += len(bloque) / FRECUENCIA
 
-            frase = " ".join(
-                segmento.text.strip()
-                for segmento in segmentos
-            ).strip()
+                    while duracion_reciente > VENTANA_ACTIVACION:
+                        anterior = audio_reciente.pop(0)
+                        duracion_reciente -= len(anterior) / FRECUENCIA
 
-            if frase:
-                print(f"Idioma detectado: {info.language}")
+                    if (
+                        duracion_reciente >= VENTANA_ACTIVACION
+                        and ahora - tiempo_ultima_busqueda
+                        >= INTERVALO_ACTIVACION
+                    ):
+                        tiempo_ultima_busqueda = ahora
 
-                if not procesar_frase(frase):
-                    break
+                        frase, idioma = transcribir(audio_reciente)
+
+                        if frase:
+                            activada, comando = detectar_activacion(frase)
+
+                            if activada:
+                                print(f"Idioma detectado: {idioma}")
+                                print(f"Ruby escuchó: {frase}")
+                                print("Ruby: ¡Te escucho!")
+
+                                ESPERANDO_COMANDO = False
+                                ultima_actividad = ahora
+
+                                # Conservar el audio que produjo la activación.
+                                audio_comando = list(audio_reciente)
+                                comando_iniciado = energia >= UMBRAL_AUDIO
+                                ultimo_audio = ahora if comando_iniciado else 0.0
+
+                                audio_reciente = []
+                                duracion_reciente = 0.0
+
+                    continue
+
+                # Ruby está activa: acumular la frase completa.
+                if energia >= UMBRAL_AUDIO:
+                    audio_comando.append(bloque)
+                    comando_iniciado = True
+                    ultimo_audio = ahora
+                    ultima_actividad = ahora
+                elif comando_iniciado:
+                    audio_comando.append(bloque)
+
+                # Ejecutar después de tres segundos de silencio.
+                if (
+                    comando_iniciado
+                    and ultimo_audio
+                    and ahora - ultimo_audio >= SILENCIO_FINAL
+                ):
+                    frase, idioma = transcribir(audio_comando)
+
+                    audio_comando = []
+                    comando_iniciado = False
+                    ultimo_audio = 0.0
+
+                    if frase:
+                        print(f"Idioma detectado: {idioma}")
+
+                        if not procesar_frase(frase):
+                            break
+
+                        ultima_actividad = time.monotonic()
+
+                
+                # Volver al modo de espera tras 3 minutos sin actividad.
+                if (
+                    not comando_iniciado
+                    and not ESPERANDO_COMANDO
+                    and ahora - ultima_actividad >= TIEMPO_INACTIVIDAD
+                ):
+                    ESPERANDO_COMANDO = True
+                    audio_comando = []
+                    audio_reciente = []
+                    duracion_reciente = 0.0
+                    tiempo_ultima_busqueda = 0.0
+
+                    print(
+                        "\nRuby: Pasaron 3 minutos sin actividad. "
+                        "Dejé de escuchar comandos. "
+                        "Decí 'Ruby' o 'Hey Ruby' para activarme."
+                    )
+
 
     except KeyboardInterrupt:
         print("\nRuby: Sistema de voz detenido.")

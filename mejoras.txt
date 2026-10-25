@@ -1,0 +1,60 @@
+
+RUBY IA — LISTA DE MEJORAS PENDIENTES Actualizado: 25/10/2026
+
+OBJETIVO Registrar las mejoras pendientes de Ruby IA para avanzar paso a
+paso, sin romper las funciones que ya funcionan.
+
+PRIORIDAD 1 — VOZ Y COMANDOS [ ] Terminar de integrar Whisper en Ruby IA
+y comprobar que los comandos se ejecuten correctamente. [ ] Probar el
+reconocimiento automático en español e inglés. [ ] Reducir errores al
+reconocer nombres de programas y juegos en inglés, por ejemplo Discord y
+Resident Evil. [ ] Comprobar que Ruby pueda recibir varios comandos
+seguidos cuando está activada. [ ] Revisar el comportamiento cuando
+pasan 3 segundos de silencio antes de procesar una frase. [ ] Probar la
+activación mediante “Ruby” y “Hey Ruby”. [ ] Probar el regreso al modo
+de espera después de 3 minutos sin actividad. [ ] Comprobar los comandos
+para pausar la escucha sin cerrar Ruby y volver a activarla.
+
+PRIORIDAD 2 — COMANDOS Y ESTABILIDAD [ ] Seguir puliendo los comandos
+existentes sin eliminar funciones que ya funcionan. [ ] Mejorar el
+manejo de frases que Ruby todavía no entiende. [ ] Probar los comandos
+de música, navegador, sistema y fecha/hora después de cada cambio. [ ]
+Mantener pruebas pequeñas y guardar los cambios en Git cuando una mejora
+funcione.
+
+PRIORIDAD 3 — MEMORIA Y CONVERSACIÓN [ ] Incorporar una memoria para
+guardar información útil y recuperarla cuando corresponda. [ ] Mejorar
+la conversación básica y las respuestas según el contexto. [ ] Integrar
+progresivamente un modelo de lenguaje para que Ruby comprenda mejor las
+solicitudes. [ ] Definir qué información puede guardar la memoria y cómo
+podrá consultarse o corregirse.
+
+PRIORIDAD 4 — PERSONALIDAD Y RESPUESTAS ESPONTÁNEAS [ ] Más adelante,
+añadir síntesis de voz para que Ruby pueda responder en voz alta. [ ]
+Detectar estornudos y responder “¡Salud!”. Nota: el primer intento
+usando el texto transcrito por Whisper no funcionó correctamente. Dejar
+esta mejora para el final; no es prioritaria y no debe complicar el
+sistema de voz. [ ] Añadir otras respuestas espontáneas solo cuando el
+reconocimiento y los comandos principales sean estables.
+
+PRIORIDAD 5 — FUNCIONES FUTURAS [ ] Mejorar el control del navegador:
+leer páginas y localizar o pulsar elementos por su texto. [ ] Mejorar el
+descubrimiento y la apertura de programas instalados. [ ] Añadir
+funciones de Internet para buscar información cuando se solicite. [ ]
+Diseñar una interfaz para Ruby. [ ] Explorar un avatar 3D y distintas
+expresiones o vestimentas. [ ] Integrar el teléfono como control remoto
+de Ruby en el PC. [ ] Considerar TV, luces, aire acondicionado, cámaras
+y otros dispositivos más adelante, cuando exista una necesidad concreta.
+
+HOJA DE RUTA GENERAL 1. Núcleo conversacional. 2. Control del PC. 3.
+Memoria. 4. Internet. 5. Integración con un modelo de lenguaje. 6.
+Visión. 7. Voz. 8. Automatización. 9. Personalidad. 10. Asistente
+completo y modular.
+
+REGLAS DE TRABAJO - Avanzar paso a paso y sin apuro. - No reemplazar una
+función que ya funciona sin probar primero la alternativa. - Hacer
+cambios pequeños y comprobarlos antes de continuar. - Si una mejora
+causa problemas, volver al último estado funcional. - La personalidad y
+los detalles secundarios van después de estabilizar las funciones
+principales. - Este documento es una lista de pendientes; marcar cada
+casilla cuando la función esté probada.

@@ -1,0 +1,391 @@
+# 🌹 Ruby IA — Comandos y estado del proyecto
+
+## 🎵 1. Música / YouTube
+
+Ruby puede buscar canciones en YouTube y abrir el resultado para reproducirlo.
+
+### Comandos reconocidos
+
+* `reproduce [canción]`
+* `reproducí [canción]`
+* `reproduceme [canción]`
+* `reproducime [canción]`
+* `pon [canción]`
+* `poné [canción]`
+* `poneme [canción]`
+* `escucha [canción]`
+* `escuchá [canción]`
+* `escuchar [canción]`
+
+También puede especificarse el artista:
+
+* `reproduce [canción] de [artista]`
+* `poné [canción] de [artista]`
+
+### Ejemplos
+
+* `poné Bring Me to Life`
+* `reproducí Numb de Linkin Park`
+* `escuchá Iron Man de Black Sabbath`
+
+**Estado:** Implementado y funcionando.
+
+---
+
+## 🌐 2. Abrir sitios web
+
+Ruby puede abrir sitios definidos en `commands/browser.py`.
+
+### YouTube
+
+* `abrí youtube`
+* `abri youtube`
+* `abre youtube`
+* `abrir youtube`
+* `abrime youtube`
+* `quiero abrir youtube`
+
+### Google
+
+* `abrí google`
+* `abri google`
+* `abre google`
+* `quiero entrar a google`
+
+### GitHub
+
+* `abrí github`
+* `abri github`
+* `abre github`
+* `entrar a github`
+* `quiero entrar a github`
+
+**Estado:** Implementado.
+
+---
+
+## 🔎 3. Búsquedas en Internet
+
+### Búsqueda general en Google
+
+* `buscá [consulta]`
+* `busca [consulta]`
+* `buscame [consulta]`
+* `buscar [consulta]`
+* `buscá en internet [consulta]`
+* `busca en internet [consulta]`
+* `quiero buscar [consulta]`
+
+Ejemplos:
+
+* `buscá Ruby Rose`
+* `busca recetas de pizza`
+* `buscá en internet cómo hacer una página web`
+* `quiero buscar Python para principiantes`
+
+### Búsqueda de imágenes
+
+* `buscá imágenes de [tema]`
+* `busca imágenes de [tema]`
+* `buscá imagenes de [tema]`
+* `buscá [tema] imágenes`
+
+### Búsqueda de videos en Google
+
+* `buscá videos de [tema]`
+* `busca videos de [tema]`
+* `buscá video de [tema]`
+* `buscá [tema] videos`
+
+### Búsqueda general en YouTube
+
+* `buscá en YouTube [tema]`
+* `busca en YouTube [tema]`
+* `buscar en YouTube [tema]`
+* `buscame en YouTube [tema]`
+
+**Estado:** Implementado. Conviene seguir probando variantes y casos límite.
+
+---
+
+## 🌍 4. Selector de navegador
+
+Ruby permite elegir qué navegador utilizar.
+
+### Comandos
+
+* `usá Chrome`
+* `usa Chrome`
+* `usar Chrome`
+* `quiero usar Chrome`
+* `usá Opera`
+* `usa Opera`
+* `usar Opera`
+* `quiero usar Opera`
+
+### Funcionamiento
+
+* Chrome está disponible como opción.
+* Opera GX está disponible como opción.
+* Ruby guarda el navegador seleccionado en `commands/browser_config.json`.
+* La selección se recupera al iniciar Ruby.
+* Las aperturas y búsquedas utilizan el navegador elegido, según las pruebas realizadas.
+
+**Estado:** Implementado y probado para Chrome y Opera GX.
+
+**Pendiente de verificación:** comprobar que el cierre de pestañas y el enfoque de ventanas también funcionen correctamente con ambos navegadores.
+
+---
+
+## 🖥️ 5. Abrir programas
+
+### Discord
+
+* `abrí discord`
+* `abri discord`
+* `abre discord`
+* `abrir discord`
+* `abrime discord`
+* `quiero abrir discord`
+
+### VS Code
+
+* `abrí vs code`
+* `abri vs code`
+* `abre vs code`
+* `abrir vs code`
+
+### Calculadora
+
+* `abrí calculadora`
+* `abri calculadora`
+* `abre calculadora`
+* `abrir calculadora`
+
+### Bloc de notas
+
+* `abrí bloc de notas`
+* `abri bloc de notas`
+* `abre bloc de notas`
+* `abrir bloc de notas`
+
+### Paint
+
+* `abrí paint`
+* `abri paint`
+* `abre paint`
+* `abrir paint`
+
+**Estado:** Implementado y probado.
+
+---
+
+## ❌ 6. Cerrar programas
+
+### Discord
+
+* `cerrá discord`
+* `cerra discord`
+* `cierra discord`
+* `cerrar discord`
+* `cerrame discord`
+* `cerrarme discord`
+
+### VS Code
+
+* `cerrá vs code`
+* `cerra vs code`
+* `cierra vs code`
+* `cerrar vs code`
+
+### Calculadora
+
+* `cerrá calculadora`
+* `cerra calculadora`
+* `cierra calculadora`
+* `cerrar calculadora`
+
+### Bloc de notas
+
+* `cerrá bloc de notas`
+* `cerra bloc de notas`
+* `cierra bloc de notas`
+* `cerrar bloc de notas`
+
+### Paint
+
+* `cerrá paint`
+* `cerra paint`
+* `cierra paint`
+* `cerrar paint`
+
+**Estado:** Implementado.
+
+---
+
+## 📑 7. Cierre de pestañas del navegador
+
+Ruby reconoce distintas formas de solicitar el cierre de pestañas.
+
+### Ejemplos
+
+* `cerrá la pestaña`
+* `cierra la pestaña`
+* `cerra la pestaña`
+* `cerrar la pestaña`
+* `cerrá pestaña`
+* `cerrá pestañas`
+* `cierra pestañas`
+* `cerrá todas las pestañas`
+* `cierra todas las pestañas`
+* `cerrame las pestañas`
+
+Ruby puede cerrar la pestaña actual o solicitar el cierre de todas las pestañas mediante el atajo correspondiente.
+
+**Estado:** Implementado. Falta comprobar el comportamiento con ambos navegadores seleccionables.
+
+---
+
+## 🔄 8. Reinicio de Ruby
+
+Ruby incorpora un comando para reiniciar el asistente desde la terminal sin tener que escribir manualmente `salir` y ejecutar de nuevo `python main.py`.
+
+### Comandos previstos en la implementación actual
+
+* `reiniciate`
+* `reiníciate`
+* `reinicia ruby`
+* `reiniciá ruby`
+* `reiniciar ruby`
+* `reiniciar`
+
+### Funcionamiento esperado
+
+1. Ruby reconoce el comando.
+2. Inicia una nueva instancia del programa.
+3. La instancia anterior termina.
+4. Ruby vuelve a mostrar su encabezado y queda lista para recibir instrucciones.
+
+**Estado:** Reinicio básico implementado, pero requiere una mejora.
+
+### Pendiente: reinicio elegante
+
+* Evitar instancias duplicadas.
+* Asegurar que el proceso anterior termine correctamente.
+* Manejar errores si la nueva instancia no puede iniciarse.
+* Mantener el directorio de trabajo correcto.
+* Comprobar que las configuraciones guardadas sigan disponibles después del reinicio.
+
+---
+
+## 💬 9. Conversación básica
+
+### Comandos
+
+* `hola`
+* `¿cómo estás?`
+* `cómo estás`
+* `¿quién eres?`
+* `quién eres`
+
+Ruby también responde a los mensajes que todavía no sabe interpretar con:
+
+`Todavía no sé cómo responder a eso.`
+
+**Estado:** Implementado.
+
+---
+
+# 🧪 10. Prueba rápida de funcionamiento
+
+Después de modificar código, se puede usar esta lista para comprobar los comandos principales.
+
+1. `hola`
+2. `quién eres`
+3. `usá Chrome`
+4. `abrí google`
+5. `buscá Ruby Rose`
+6. `buscá imágenes de Ruby Rose`
+7. `buscá videos de RWBY`
+8. `buscá en YouTube Bring Me to Life`
+9. `usá Opera`
+10. `abrí youtube`
+11. `cerrá la pestaña`
+12. `abrí discord`
+13. `abrí vs code`
+14. `abrí calculadora`
+15. `abrí bloc de notas`
+16. `abrí paint`
+17. `cerrá discord`
+18. `cerrá vs code`
+19. `cerrá calculadora`
+20. `cerrá bloc de notas`
+21. `cerrá paint`
+22. `poné Numb de Linkin Park`
+23. `reiniciate`
+
+---
+
+# 🚧 11. Próximas misiones de desarrollo
+
+## Prioridad 1 — Terminar el reinicio elegante
+
+* Corregir el mecanismo actual de reinicio.
+* Evitar procesos duplicados.
+* Verificar el inicio y la finalización de las instancias.
+
+## Prioridad 2 — Interacción con páginas web
+
+* `volvé atrás`
+* `volvé adelante`
+* `recargá la página`
+* `abrí el primer resultado`
+* `abrí el cuarto video`
+* `hacé clic ahí`
+
+## Prioridad 3 — Contexto del navegador
+
+* Recordar la última búsqueda.
+* Reconocer si estamos en Google, Imágenes, Videos o YouTube.
+* Interpretar «el primero», «el cuarto» o «ese resultado».
+* Asociar los comandos con la página correcta.
+
+## Prioridad 4 — Control avanzado de pestañas
+
+* Abrir una pestaña nueva.
+* Cambiar de pestaña.
+* Cerrar una pestaña específica.
+* Volver a una pestaña anterior.
+
+## Prioridad 5 — Memoria de Ruby
+
+* Guardar preferencias.
+* Recordar configuraciones entre sesiones.
+* Preparar una estructura de memoria reutilizable por otros módulos.
+
+## Prioridad 6 — Detector automático de programas
+
+* Buscar ejecutables y accesos directos.
+* Detectar ubicaciones habituales de instalación.
+* Guardar rutas encontradas.
+* Reutilizar el detector desde `system.py` y `browser.py`.
+
+---
+
+# 🧭 12. Hoja de ruta general de Ruby IA
+
+1. Núcleo conversacional.
+2. Control del PC.
+3. Memoria.
+4. Internet más avanzada.
+5. Integración con un LLM.
+6. Visión.
+7. Voz.
+8. Automatización.
+9. Personalidad.
+10. Asistente completo y modular.
+11. Interfaz gráfica y avatar 3D inspirado en Ruby Rose.
+
+**Objetivo:** construir Ruby paso a paso, comprendiendo la arquitectura y manteniendo cada módulo funcional antes de avanzar al siguiente.
+
+**Próxima tarea concreta:** terminar el reinicio elegante y después continuar con los comandos de interacción con páginas web.

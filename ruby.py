@@ -2,6 +2,7 @@ from commands.music import music_command
 from commands.general import general_command
 from commands.browser import browser_command
 from commands.system import system_command
+from commands.stopwatch import stopwatch_command
 
 def limpiar_mensaje(mensaje):
     mensaje = mensaje.strip()
@@ -31,31 +32,36 @@ def responder(mensaje):
 
     mensaje = limpiar_mensaje(mensaje)
 
-    # 1. Música
+     # 1. Cronómetro de Windows
+    respuesta = stopwatch_command(mensaje)
+    if respuesta:
+        return respuesta
+
+    # 2. Música
     respuesta = music_command(mensaje)
 
     if respuesta:
         return respuesta
 
-    # 2. Fecha y hora
+    # 3. Fecha y hora
     respuesta = general_command(mensaje)
 
     if respuesta:
         return respuesta
 
-    # 3. Navegador
+    # 4. Navegador
     respuesta = browser_command(mensaje)
 
     if respuesta:
         return respuesta
 
-    # 4. Sistema
+    # 5. Sistema
     respuesta = system_command(mensaje)
 
     if respuesta:
         return respuesta
 
-    # 5. Conversación básica
+    # 6. Conversación básica
     mensaje_lower = mensaje.lower()
 
     if "hola" in mensaje_lower:

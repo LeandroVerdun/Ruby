@@ -1,5 +1,5 @@
 
-RUBY IA — LISTA DE MEJORAS PENDIENTES Actualizado: 25/10/2026
+RUBY IA — LISTA DE MEJORAS PENDIENTES Actualizado: 26/10/2026
 
 OBJETIVO Registrar las mejoras pendientes de Ruby IA para avanzar paso a
 paso, sin romper las funciones que ya funcionan.
@@ -19,15 +19,30 @@ PRIORIDAD 2 — COMANDOS Y ESTABILIDAD [ ] Seguir puliendo los comandos
 existentes sin eliminar funciones que ya funcionan. [ ] Mejorar el
 manejo de frases que Ruby todavía no entiende. [ ] Probar los comandos
 de música, navegador, sistema y fecha/hora después de cada cambio. [ ]
-Mantener pruebas pequeñas y guardar los cambios en Git cuando una mejora
-funcione.
+Corregir el comando “reiniciá la canción”: actualmente parece recargar
+la página de YouTube. Debe volver la canción al segundo 0 y reproducirla
+desde el principio, sin recargar la página. [ ] Mejorar los comandos
+para adelantar y retroceder, permitiendo indicar minutos y segundos. [ ]
+Añadir o pulir el salto a un tiempo exacto de la canción o video. [ ]
+Revisar el comportamiento de los comandos para cerrar la pestaña actual,
+cerrar todas las pestañas y cerrar el navegador. [ ] Mejorar la búsqueda
+y selección de canciones en YouTube: distinguir entre “buscá en YouTube
+[canción]” (mostrar resultados sin reproducir automáticamente) y “poné
+[canción]” (esperar 10 segundos antes de reproducir el primer resultado,
+salvo que se elija otro). [ ] Mejorar la navegación por los resultados
+de YouTube y Google, incluyendo desplazamiento hacia abajo y lateral
+cuando corresponda. [ ] Mejorar el tiempo de respuesta de Ruby sin
+perjudicar la estabilidad. [ ] Mantener pruebas pequeñas y guardar los
+cambios en Git cuando una mejora funcione.
 
 PRIORIDAD 3 — MEMORIA Y CONVERSACIÓN [ ] Incorporar una memoria para
 guardar información útil y recuperarla cuando corresponda. [ ] Mejorar
 la conversación básica y las respuestas según el contexto. [ ] Integrar
 progresivamente un modelo de lenguaje para que Ruby comprenda mejor las
 solicitudes. [ ] Definir qué información puede guardar la memoria y cómo
-podrá consultarse o corregirse.
+podrá consultarse o corregirse. [ ] Explorar un sistema de aprendizaje
+asistido por un modelo de lenguaje, sin modificar automáticamente el
+código ni poner en riesgo las funciones existentes.
 
 PRIORIDAD 4 — PERSONALIDAD Y RESPUESTAS ESPONTÁNEAS [ ] Más adelante,
 añadir síntesis de voz para que Ruby pueda responder en voz alta. [ ]

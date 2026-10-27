@@ -93,41 +93,68 @@ def normalizar(texto):
     return " ".join(texto.split())
 
 
+
 def controlar_volumen(porcentaje):
     if not 0 <= porcentaje <= 100:
         return "El volumen debe estar entre 0 y 100 por ciento."
 
-    try:
-        from ctypes import cast, POINTER
-        from comtypes import CLSCTX_ALL
-        from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+    resultado = {"mensaje": "No pude modificar el volumen de Windows."}
 
-        dispositivo = AudioUtilities.GetSpeakers()
+    def ajustar_en_hilo():
+        com_inicializado = False
 
-        # Compatible con distintas versiones de pycaw.
         try:
-            volumen = dispositivo.EndpointVolume
-        except AttributeError:
-            interfaz = dispositivo.Activate(
-                IAudioEndpointVolume._iid_,
+            from ctypes import cast, POINTER
+            from comtypes import (
                 CLSCTX_ALL,
+                CoInitialize,
+                CoUninitialize,
+            )
+            from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+
+            # Inicializar COM en este hilo independiente.
+            CoInitialize()
+            com_inicializado = True
+
+            dispositivo = AudioUtilities.GetSpeakers()
+
+            try:
+                volumen = dispositivo.EndpointVolume
+            except AttributeError:
+                interfaz = dispositivo.Activate(
+                    IAudioEndpointVolume._iid_,
+                    CLSCTX_ALL,
+                    None
+                )
+                volumen = cast(
+                    interfaz,
+                    POINTER(IAudioEndpointVolume)
+                )
+
+            volumen.SetMasterVolumeLevelScalar(
+                porcentaje / 100.0,
                 None
             )
-            volumen = cast(
-                interfaz,
-                POINTER(IAudioEndpointVolume)
+
+            resultado["mensaje"] = (
+                f"Volumen de Windows ajustado al {porcentaje}%."
             )
 
-        volumen.SetMasterVolumeLevelScalar(
-            porcentaje / 100,
-            None
-        )
+        except Exception as error:
+            resultado["mensaje"] = (
+                "No pude modificar el volumen de Windows."
+            )
+            print(f"Error al controlar el volumen: {error}")
 
-        return f"Volumen de Windows ajustado al {porcentaje}%."
+        finally:
+            if com_inicializado:
+                CoUninitialize()
 
-    except Exception as error:
-        print(f"Error al controlar el volumen: {error}")
-        return "No pude modificar el volumen de Windows."
+    hilo = threading.Thread(target=ajustar_en_hilo)
+    hilo.start()
+    hilo.join()
+
+    return resultado["mensaje"]
 
 
 
